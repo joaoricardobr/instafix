@@ -8,11 +8,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     :root {
-      --color1: #2a0308;
-      --color2: #924f1b;
-      --color3: #e2ac3f;
-      --color4: #f8ebbe;
-      --color5: #7ba58d;
+      --color1: #21203f;
+      --color2: #fff1ce;
+      --color3: #e7bfa5;
+      --color4: #c5a898;
+      --color5: #4b3c5d;
     }
     * {
       margin: 0;
@@ -21,8 +21,8 @@
     }
     body {
       font-family: Arial, sans-serif;
-      background: var(--color3);
-      color: #333;
+      background: var(--color2);
+      color: var(--color1);
       text-align: center;
       padding: 20px;
     }
@@ -46,49 +46,63 @@
       gap: 20px;
     }
     .image-container {
-      position: relative;
       width: 100%;
-      max-width: 350px;
-      height: 450px;
-      border: 2px dashed var(--color5);
+      max-width: 400px;
+      height: 400px;
+      border: 2px dashed var(--color4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto;
+      position: relative;
+      background-color: var(--color3);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .image-container canvas {
+      width: 100%;
+      height: 100%;
+    }
+    .upload-area {
+      cursor: pointer;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
-      background: var(--color2);
-      border-radius: 15px;
-      overflow: hidden;
-      transition: transform 0.3s ease;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
-    .image-container:hover {
-      transform: scale(1.02);
+    .image-container:hover .upload-area {
+      opacity: 1;
     }
-    #imageCanvas {
-      max-width: 100%;
-      max-height: 100%;
-    }
-    .image-container p {
-      font-size: 1rem;
-      color: var(--color5);
+    .upload-area p {
       margin-top: 10px;
+      font-size: 1rem;
     }
     .btn {
-      background-color: var(--color1);
-      color: #fff;
-      border: none;
+      background-color: var(--color5);
+      color: white;
       padding: 10px 20px;
-      margin: 10px;
+      border: none;
       border-radius: 5px;
       cursor: pointer;
+      margin: 10px;
       transition: background-color 0.3s ease;
     }
     .btn:hover {
-      background-color: var(--color5);
+      background-color: var(--color1);
     }
     .controls {
       width: 100%;
       max-width: 350px;
-      background: var(--color4);
+      background: var(--color2);
       border-radius: 15px;
       padding: 20px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -102,7 +116,7 @@
       white-space: nowrap;
     }
     .filter-buttons button {
-      background-color: var(--color1);
+      background-color: var(--color5);
       color: #fff;
       border: none;
       padding: 8px 12px;
@@ -111,7 +125,7 @@
       transition: background-color 0.3s ease;
     }
     .filter-buttons button:hover {
-      background-color: var(--color5);
+      background-color: var(--color1);
     }
     .sliders {
       margin: 20px 0;
@@ -119,7 +133,7 @@
     .sliders label {
       display: block;
       margin: 10px 0 5px;
-      color: var(--color5);
+      color: var(--color1);
     }
     .sliders input[type="range"] {
       width: 100%;
@@ -128,10 +142,10 @@
     footer {
       margin-top: 40px;
       font-size: 0.9rem;
-      color: var(--color5);
+      color: var(--color1);
     }
     footer a {
-      color: var(--color1);
+      color: var(--color5);
       text-decoration: none;
     }
     @media (max-width: 768px) {
@@ -160,19 +174,18 @@
     <h1>Transforme Suas Fotos com um Toque Mágico</h1>
     <h3>100 Filtros incríveis para dar vida e estilo às suas imagens</h3>
   </header>
-
   <!-- Imagem no Topo -->
   <img src="https://static-gcp.freepikcompany.com/web-app/media/freepik-12-780.webp" alt="Freepik Banner" class="top-image">
-
   <main>
-    <!-- Caixa de Upload -->
-    <div class="image-container">
-      <canvas id="imageCanvas" width="350" height="450"></canvas>
+   <!-- Upload Area -->
+  <div class="image-container">
+    <canvas id="imageCanvas"></canvas>
+    <div class="upload-area">
+      <p><i class="fas fa-cloud-upload-alt"></i> Clique ou arraste para carregar</p>
       <input type="file" id="imageInput" accept="image/*" style="display: none;">
-      <button id="addImageButton" class="btn"><i class="fas fa-plus"></i> Carregar Imagem</button>
-      <p>Ou arraste para dentro da caixa</p>
+      <button class="btn" id="addImageButton">Carregar Imagem</button>
     </div>
-
+  </div>
     <!-- Controles -->
     <div class="controls">
       <!-- Filtros -->
@@ -198,7 +211,6 @@
         <button class="btn filter" data-filter="acid">Acid</button>
         <button class="btn filter" data-filter="kodachrome">Kodachrome</button>
       </div>
-
       <!-- Ajustes -->
       <h2>Ajustes</h2>
       <div class="sliders">
@@ -211,16 +223,13 @@
         <label for="blur">Desfoque</label>
         <input type="range" id="blur" min="0" max="20" value="0">
       </div>
-
       <!-- Botão de Download -->
       <button id="downloadButton" class="btn"><i class="fas fa-download"></i> Baixar Imagem</button>
     </div>
   </main>
-
   <footer>
     <p>Criado por <a href="https://github.com/joaoricardobr">João Ricardo</a> | Ícones por <a href="https://fontawesome.com/">Font Awesome</a></p>
   </footer>
-
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const canvas = document.getElementById("imageCanvas");
@@ -232,10 +241,8 @@
       const saturationSlider = document.getElementById("saturation");
       const blurSlider = document.getElementById("blur");
       const downloadButton = document.getElementById("downloadButton");
-
       let img = new Image();
       let currentFilter = null;
-
       // Carregar imagem ao clicar no botão ou arrastar
       addImageButton.addEventListener("click", () => imageInput.click());
       imageInput.addEventListener("change", (e) => loadImage(e.target.files[0]));
@@ -244,7 +251,6 @@
         e.preventDefault();
         loadImage(e.dataTransfer.files[0]);
       });
-
       function loadImage(file) {
         if (!file) return;
         const url = URL.createObjectURL(file);
@@ -256,7 +262,6 @@
           applyFilters();
         };
       }
-
       // Aplicar filtros
       document.querySelectorAll(".filter").forEach((btn) =>
         btn.addEventListener("click", (e) => {
@@ -264,12 +269,10 @@
           applyFilters();
         })
       );
-
       // Ajustar brilho, contraste, saturação e desfoque
       [brightnessSlider, contrastSlider, saturationSlider, blurSlider].forEach((slider) =>
         slider.addEventListener("input", applyFilters)
       );
-
       function applyFilters() {
         Caman("#imageCanvas", img, function () {
           this.revert(false);
@@ -281,7 +284,6 @@
           this.render();
         });
       }
-
       // Baixar imagem
       downloadButton.addEventListener("click", () => {
         const link = document.createElement("a");
