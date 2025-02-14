@@ -4,65 +4,77 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Editor de Imagens</title>
+  <!-- Bibliotecas Externas -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/camanjs/4.1.2/caman.full.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     :root {
-      --color1: #21203f;
-      --color2: #fff1ce;
-      --color3: #e7bfa5;
-      --color4: #c5a898;
-      --color5: #4b3c5d;
+      --primary-color: #21203f;
+      --secondary-color: #fff1ce;
+      --accent-color: #e7bfa5;
+      --background-color: #c5a898;
+      --text-color: #4b3c5d;
     }
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
+
     body {
       font-family: Arial, sans-serif;
-      background: var(--color2);
-      color: var(--color1);
+      background: var(--secondary-color);
+      color: var(--text-color);
       text-align: center;
       padding: 20px;
     }
+
     header {
       margin-bottom: 20px;
     }
+
     h1 {
       font-size: 2rem;
       margin-bottom: 10px;
-      color: var(--color5);
+      color: var(--text-color);
     }
+
     h3 {
       font-size: 1.2rem;
-      color: var(--color5);
+      color: var(--text-color);
       margin-bottom: 20px;
     }
+
     main {
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 20px;
     }
+
     .image-container {
+      position: relative;
       width: 100%;
       max-width: 400px;
       height: 400px;
-      border: 2px dashed var(--color4);
+      border: 2px dashed var(--text-color);
       display: flex;
       justify-content: center;
       align-items: center;
-      margin: 0 auto;
-      position: relative;
-      background-color: var(--color3);
+      background: url("https://static-gcp.freepikcompany.com/web-app/media/freepik-12-780.webp") no-repeat center center/cover;
       border-radius: 10px;
       overflow: hidden;
     }
+
     .image-container canvas {
       width: 100%;
       height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
     }
+
     .upload-area {
       cursor: pointer;
       position: absolute;
@@ -78,16 +90,21 @@
       color: #fff;
       opacity: 0;
       transition: opacity 0.3s ease;
+      pointer-events: none; /* Desativa interações enquanto oculto */
     }
+
     .image-container:hover .upload-area {
       opacity: 1;
+      pointer-events: auto; /* Ativa interações ao passar o mouse */
     }
+
     .upload-area p {
       margin-top: 10px;
       font-size: 1rem;
     }
+
     .btn {
-      background-color: var(--color5);
+      background-color: var(--text-color);
       color: white;
       padding: 10px 20px;
       border: none;
@@ -96,58 +113,85 @@
       margin: 10px;
       transition: background-color 0.3s ease;
     }
+
     .btn:hover {
-      background-color: var(--color1);
+      background-color: var(--primary-color);
     }
+
     .controls {
       width: 100%;
-      max-width: 350px;
-      background: var(--color2);
+      max-width: 400px;
+      background: var(--secondary-color);
       border-radius: 15px;
       padding: 20px;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
+
     .filter-buttons {
       display: flex;
-      justify-content: center;
+      overflow-x: auto; /* Habilita rolagem horizontal */
       gap: 10px;
       margin-bottom: 20px;
-      overflow-x: auto;
-      white-space: nowrap;
+      padding: 10px 0;
+      scrollbar-width: thin; /* Estiliza a barra de rolagem */
+      scrollbar-color: var(--text-color) transparent;
     }
+
+    .filter-buttons::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .filter-buttons::-webkit-scrollbar-thumb {
+      background: var(--text-color);
+      border-radius: 10px;
+    }
+
+    .filter-buttons::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
     .filter-buttons button {
-      background-color: var(--color5);
+      background-color: var(--text-color);
       color: #fff;
       border: none;
       padding: 8px 12px;
       border-radius: 5px;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      font-size: 0.9rem;
+      flex-shrink: 0; /* Evita que os botões encolham */
     }
+
     .filter-buttons button:hover {
-      background-color: var(--color1);
+      background-color: var(--primary-color);
     }
+
     .sliders {
       margin: 20px 0;
     }
+
     .sliders label {
       display: block;
       margin: 10px 0 5px;
-      color: var(--color1);
+      color: var(--text-color);
     }
+
     .sliders input[type="range"] {
       width: 100%;
       margin-bottom: 10px;
     }
+
     footer {
       margin-top: 40px;
       font-size: 0.9rem;
-      color: var(--color1);
+      color: var(--text-color);
     }
+
     footer a {
-      color: var(--color5);
+      color: var(--primary-color);
       text-decoration: none;
     }
+
     @media (max-width: 768px) {
       h1 {
         font-size: 1.5rem;
@@ -159,26 +203,17 @@
         padding: 15px;
       }
     }
-    /* Estilo da imagem no topo */
-    .top-image {
-      width: 100%;
-      max-width: 800px;
-      margin: 0 auto 20px;
-      border-radius: 15px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
   </style>
 </head>
 <body>
+  <!-- Header -->
   <header>
     <h1>Transforme Suas Fotos com um Toque Mágico</h1>
-    <h3>100 Filtros incríveis para dar vida e estilo às suas imagens</h3>
+    <h3>Edite suas imagens com 30 filtros incríveis e ajustes personalizados</h3>
   </header>
-  <!-- Imagem no Topo -->
-  <img src="https://static-gcp.freepikcompany.com/web-app/media/freepik-12-780.webp" alt="Freepik Banner" class="top-image">
-  <main>
-   <!-- Upload Area -->
-  <div class="image-container">
+
+  <!-- Upload Area -->
+  <div class="image-container" id="uploadArea">
     <canvas id="imageCanvas"></canvas>
     <div class="upload-area">
       <p><i class="fas fa-cloud-upload-alt"></i> Clique ou arraste para carregar</p>
@@ -186,63 +221,87 @@
       <button class="btn" id="addImageButton">Carregar Imagem</button>
     </div>
   </div>
-    <!-- Controles -->
-    <div class="controls">
-      <!-- Filtros -->
-      <h2>Filtros 2025</h2>
-      <div class="filter-buttons">
- <button class="btn filter" data-filter="vintage">Vintage</button>
-        <button class="btn filter" data-filter="lomo">Lomo</button>
-        <button class="btn filter" data-filter="clarity">Clarity</button>
-        <button class="btn filter" data-filter="sinCity">Sin City</button>
-        <button class="btn filter" data-filter="crossProcess">Cross Process</button>
-        <button class="btn filter" data-filter="pinhole">Pinhole</button>
-        <button class="btn filter" data-filter="nostalgia">Nostalgia</button>
-        <button class="btn filter" data-filter="herMajesty">Her Majesty</button>
-        <button class="btn filter" data-filter="concentrate">Concentrate</button>
-        <button class="btn filter" data-filter="glow">Glow</button>
-        <button class="btn filter" data-filter="jarques">Jarques</button>
-        <button class="btn filter" data-filter="hemingway">Hemingway</button>
-        <button class="btn filter" data-filter="orangePeel">Orange Peel</button>
-        <button class="btn filter" data-filter="sunrise">Sunrise</button>
-        <button class="btn filter" data-filter="love">Love</button>
-        <button class="btn filter" data-filter="grungy">Grungy</button>
-        <button class="btn filter" data-filter="oldBoot">Old Boot</button>
-        <button class="btn filter" data-filter="acid">Acid</button>
-        <button class="btn filter" data-filter="kodachrome">Kodachrome</button>
-      </div>
-      <!-- Ajustes -->
-      <h2>Ajustes</h2>
-      <div class="sliders">
-        <label for="brightness">Brilho</label>
-        <input type="range" id="brightness" min="-100" max="100" value="0">
-        <label for="contrast">Contraste</label>
-        <input type="range" id="contrast" min="-100" max="100" value="0">
-        <label for="saturation">Saturação</label>
-        <input type="range" id="saturation" min="-100" max="100" value="0">
-        <label for="blur">Desfoque</label>
-        <input type="range" id="blur" min="0" max="20" value="0">
-      </div>
-      <!-- Botão de Download -->
-      <button id="downloadButton" class="btn"><i class="fas fa-download"></i> Baixar Imagem</button>
+
+  <!-- Controles -->
+  <div class="controls">
+    <!-- Filtros -->
+    <h2>Filtros</h2>
+    <div class="filter-buttons" id="filterButtons">
+      <button class="btn filter" data-filter="vintage">Vintage</button>
+      <button class="btn filter" data-filter="lomo">Lomo</button>
+      <button class="btn filter" data-filter="clarity">Clarity</button>
+      <button class="btn filter" data-filter="sinCity">Sin City</button>
+      <button class="btn filter" data-filter="crossProcess">Cross Process</button>
+      <button class="btn filter" data-filter="pinhole">Pinhole</button>
+      <button class="btn filter" data-filter="nostalgia">Nostalgia</button>
+      <button class="btn filter" data-filter="herMajesty">Her Majesty</button>
+      <button class="btn filter" data-filter="concentrate">Concentrate</button>
+      <button class="btn filter" data-filter="glow">Glow</button>
+      <button class="btn filter" data-filter="jarques">Jarques</button>
+      <button class="btn filter" data-filter="hemingway">Hemingway</button>
+      <button class="btn filter" data-filter="orangePeel">Orange Peel</button>
+      <button class="btn filter" data-filter="sunrise">Sunrise</button>
+      <button class="btn filter" data-filter="love">Love</button>
+      <button class="btn filter" data-filter="grungy">Grungy</button>
+      <button class="btn filter" data-filter="oldBoot">Old Boot</button>
+      <button class="btn filter" data-filter="acid">Acid</button>
+      <button class="btn filter" data-filter="kodachrome">Kodachrome</button>
+      <button class="btn filter" data-filter="technicolor">Technicolor</button>
+      <button class="btn filter" data-filter="brownie">Brownie</button>
+      <button class="btn filter" data-filter="vibrance">Vibrance</button>
+      <button class="btn filter" data-filter="sepia">Sepia</button>
+      <button class="btn filter" data-filter="greyscale">Greyscale</button>
+      <button class="btn filter" data-filter="invert">Invert</button>
+      <button class="btn filter" data-filter="polaroid">Polaroid</button>
+      <button class="btn filter" data-filter="neon">Neon</button>
+      <button class="btn filter" data-filter="comic">Comic</button>
+      <button class="btn filter" data-filter="nightVision">Night Vision</button>
+      <button class="btn filter" data-filter="focus">Focus</button>
+      <button class="btn filter" data-filter="edgeEnhance">Edge Enhance</button>
     </div>
-  </main>
+
+    <!-- Ajustes -->
+    <h2>Ajustes</h2>
+    <div class="sliders">
+      <label for="brightness">Brilho</label>
+      <input type="range" id="brightness" min="-100" max="100" value="0">
+      <label for="contrast">Contraste</label>
+      <input type="range" id="contrast" min="-100" max="100" value="0">
+      <label for="saturation">Saturação</label>
+      <input type="range" id="saturation" min="-100" max="100" value="0">
+      <label for="blur">Desfoque</label>
+      <input type="range" id="blur" min="0" max="20" value="0">
+      <label for="sharpness">Nitidez</label>
+      <input type="range" id="sharpness" min="-100" max="100" value="0">
+      <label for="hue">Matiz</label>
+      <input type="range" id="hue" min="-100" max="100" value="0">
+    </div>
+
+    <!-- Botão de Download -->
+    <button id="downloadButton" class="btn"><i class="fas fa-download"></i> Baixar Imagem</button>
+  </div>
+
+  <!-- Footer -->
   <footer>
     <p>Criado por <a href="https://github.com/joaoricardobr">João Ricardo</a> | Ícones por <a href="https://fontawesome.com/">Font Awesome</a></p>
   </footer>
+
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const canvas = document.getElementById("imageCanvas");
-      const ctx = canvas.getContext("2d");
       const imageInput = document.getElementById("imageInput");
       const addImageButton = document.getElementById("addImageButton");
       const brightnessSlider = document.getElementById("brightness");
       const contrastSlider = document.getElementById("contrast");
       const saturationSlider = document.getElementById("saturation");
       const blurSlider = document.getElementById("blur");
+      const sharpnessSlider = document.getElementById("sharpness");
+      const hueSlider = document.getElementById("hue");
       const downloadButton = document.getElementById("downloadButton");
+
       let img = new Image();
-      let currentFilter = null;
+      let camanInstance = null;
+
       // Carregar imagem ao clicar no botão ou arrastar
       addImageButton.addEventListener("click", () => imageInput.click());
       imageInput.addEventListener("change", (e) => loadImage(e.target.files[0]));
@@ -251,6 +310,7 @@
         e.preventDefault();
         loadImage(e.dataTransfer.files[0]);
       });
+
       function loadImage(file) {
         if (!file) return;
         const url = URL.createObjectURL(file);
@@ -258,38 +318,55 @@
         img.onload = () => {
           canvas.width = 350;
           canvas.height = 450;
+          const ctx = canvas.getContext("2d");
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          applyFilters();
+
+          // Inicializa o Camaleon
+          camanInstance = Caman("#imageCanvas", img);
         };
       }
+
       // Aplicar filtros
       document.querySelectorAll(".filter").forEach((btn) =>
         btn.addEventListener("click", (e) => {
-          currentFilter = e.target.dataset.filter;
-          applyFilters();
+          const filterName = e.target.dataset.filter;
+          if (!camanInstance) return;
+
+          camanInstance.revert(false); // Remove filtros anteriores
+          camanInstance[filterName](); // Aplica o filtro selecionado
+          camanInstance.render(); // Renderiza as alterações
         })
       );
-      // Ajustar brilho, contraste, saturação e desfoque
-      [brightnessSlider, contrastSlider, saturationSlider, blurSlider].forEach((slider) =>
-        slider.addEventListener("input", applyFilters)
+
+      // Ajustar brilho, contraste, saturação, desfoque, nitidez e matiz
+      [brightnessSlider, contrastSlider, saturationSlider, blurSlider, sharpnessSlider, hueSlider].forEach((slider) =>
+        slider.addEventListener("input", applyAdjustments)
       );
-      function applyFilters() {
-        Caman("#imageCanvas", img, function () {
-          this.revert(false);
-          if (currentFilter) this[currentFilter]();
-          this.brightness(parseInt(brightnessSlider.value));
-          this.contrast(parseInt(contrastSlider.value));
-          this.saturation(parseInt(saturationSlider.value));
-          this.stackBlur(parseInt(blurSlider.value)); // Aplica o desfoque
-          this.render();
-        });
+
+      function applyAdjustments() {
+        if (!camanInstance) return;
+
+        camanInstance.revert(false); // Remove ajustes anteriores
+        camanInstance
+          .brightness(parseInt(brightnessSlider.value))
+          .contrast(parseInt(contrastSlider.value))
+          .saturation(parseInt(saturationSlider.value))
+          .stackBlur(parseInt(blurSlider.value)) // Desfoque
+          .sharpen(parseInt(sharpnessSlider.value)) // Nitidez
+          .hue(parseInt(hueSlider.value)) // Matiz
+          .render(); // Renderiza as alterações
       }
+
       // Baixar imagem
       downloadButton.addEventListener("click", () => {
-        const link = document.createElement("a");
-        link.href = canvas.toDataURL("image/png");
-        link.download = "edited-image.png";
-        link.click();
+        if (!camanInstance) return;
+
+        camanInstance.render(() => {
+          const link = document.createElement("a");
+          link.href = canvas.toDataURL("image/png");
+          link.download = "edited-image.png";
+          link.click();
+        });
       });
     });
   </script>
