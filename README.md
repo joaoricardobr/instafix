@@ -56,7 +56,7 @@ Para executar este projeto localmente, você precisará de:
 
 ## 🌟 Demonstração Online
 
-Você pode testar o editor de imagens diretamente no navegador sem precisar baixar o código. [Clique aqui para acessar a demonstração online](#) *(insira o link do seu site ou GitHub Pages aqui)*.
+Você pode testar o editor de imagens diretamente no navegador sem precisar baixar o código. [Clique aqui para acessar a demonstração online](https://joaoricardobr.github.io/instafix/) *(insira o link do seu site ou GitHub Pages aqui)*.
 
 ---
 
